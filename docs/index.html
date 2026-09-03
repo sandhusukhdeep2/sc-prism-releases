@@ -88,6 +88,13 @@
   figure img { width: 100%; height: auto; display: block; border-radius: 10px; border: 1px solid var(--hair); }
   figcaption { font-size: 13.5px; color: var(--ink-3); margin-top: 12px; }
 
+  .shots { display: grid; gap: 26px; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
+  .shots figure { display: flex; flex-direction: column; }
+  .shots img { box-shadow: 0 1px 2px rgba(20,22,26,.05), 0 10px 30px rgba(20,22,26,.07); }
+  .shots figcaption { margin-top: 10px; }
+  .shots figcaption b { display: block; color: var(--ink); font-weight: 500;
+                        font-size: 14.5px; margin-bottom: 3px; }
+
   .bets { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
   .bet { background: var(--card); border: 1px solid var(--hair); border-radius: 10px; padding: 20px 22px; }
   .bet h3 { font-size: 15.5px; margin: 0 0 8px; letter-spacing: -0.01em; }
@@ -160,7 +167,53 @@
 </section>
 
 <section class="wrap">
+  <h2>Look inside</h2>
+  <p class="sub">Real captures of the shipping build. The company, the projects and the files in
+    them are invented so no personal data appears, and the vault path is shown generically for the
+    same reason — nothing else is retouched.</p>
+  <div class="shots">
+    <figure>
+      <img src="assets/shots/01-work.png" alt="The work board mid-run: three named seats — lead, researcher and critic — each showing the model behind it and the tokens it returned, and a badge reading that six vault notes were read and stayed on this Mac.">
+      <figcaption><b>One board, and a live account of who is on it</b>
+        Every seat named, with the model actually behind it and what it sent back. Work that touched
+        your notes says so — and says it never left the machine.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/shots/02-agents.png" alt="The agents page: five system agents and a four-agent project team, each card carrying a model badge reading local, Claude or Gemini.">
+      <figcaption><b>Your crew, and which AI each one runs on</b>
+        Agents are markdown files in your vault, not rows in a database. Each carries its own
+        charter, its own skills and its own model.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/shots/03-skills.png" alt="The skill library with four portable SKILL.md skills, and above them two tools the crew built for itself: one scope-approved but not yet proven, one quarantined for asking for access it never declared.">
+      <figcaption><b>Skills it can use — and tools it builds when none fit</b>
+        The open <code>SKILL.md</code> format, so a skill written for another runtime works here.
+        A tool the crew writes itself stays inert until it passes four gates.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/shots/04-ais.png" alt="Provider settings: Claude connected on a Pro or Max subscription and set as primary, OpenAI switched off, Gemini connected by API key with the credential held by the gateway and never shown again.">
+      <figcaption><b>Your AIs, on your terms</b>
+        A subscription, an API key, a local server, or all three — each switched on separately.
+        Keys go to the gateway and are never rendered back into the interface.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/shots/05-rules.png" alt="The rules review: paths never touched by any agent, actions that always ask first, the verify command that must pass before work is trusted, and the policy for which AI is allowed to handle what.">
+      <figcaption><b>Rules in your words, not a config file</b>
+        What it may never touch, what it must ask about first, which check has to pass before any
+        work is trusted, and which AI is allowed to see what.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/shots/09-console.png" alt="The governance console: token burn split between the local model and Claude with the share of runs that stayed on this Mac, hook latency and fire-rate, a drift monitor, and eval scores with a compliance export button.">
+      <figcaption><b>The governance console</b>
+        Burn by provider, hook latency and fire-rate, drift across runs, and the eval scores behind
+        the verdicts — with the whole hash-chained record exportable.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="wrap">
   <h2>Four bets</h2>
+
   <p class="sub">Each one is a constraint the code actually enforces.</p>
   <div class="bets">
     <div class="bet">
