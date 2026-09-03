@@ -1,0 +1,7 @@
+.DS_Store
+*.dmg
+
+# Working files — yours, not the public repo's.
+LINKEDIN-POST.md
+RELEASE-CHECKLIST.md
+capability-probe.py

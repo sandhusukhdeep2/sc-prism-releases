@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SC Prism — control over the AI you run</title>
+<meta name="description" content="A macOS app where Claude, Gemini and local models work as a staffed team. Deterministic code chairs every run, your own tests decide what counts as done, and every action lands on a replayable record.">
+<meta property="og:title" content="SC Prism">
+<meta property="og:description" content="Control over the AI you run. Many agents, many models, one auditable record.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* One accent, used only where something is actually proven. The rest is
+     type and space — the product's whole posture is restraint plus evidence. */
+  :root {
+    --paper: #fbfaf9;
+    --card: #ffffff;
+    --ink: #14161a;
+    --ink-2: #4a4f57;
+    --ink-3: #767b84;
+    --hair: #e4e2de;
+    --proof: #1a7f37;
+    --warn: #9a6700;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0e1013;
+      --card: #16191d;
+      --ink: #eceef1;
+      --ink-2: #a8aeb7;
+      --ink-3: #7d838c;
+      --hair: #262a30;
+      --proof: #3fb950;
+      --warn: #d29922;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 24px; }
+  a { color: inherit; }
+
+  header { padding: 88px 0 56px; }
+  .mark {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-3); margin: 0 0 28px;
+  }
+  h1 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(40px, 6.5vw, 68px); line-height: 1.06;
+    letter-spacing: -0.015em; margin: 0 0 22px; text-wrap: balance;
+  }
+  h1 em { font-style: italic; }
+  .lede {
+    font-size: clamp(17px, 2.1vw, 20px); color: var(--ink-2);
+    max-width: 62ch; margin: 0 0 34px;
+  }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .btn {
+    display: inline-block; padding: 12px 22px; border-radius: 8px;
+    background: var(--ink); color: var(--paper); text-decoration: none;
+    font-size: 15px; font-weight: 500; border: 1px solid var(--ink);
+  }
+  .btn--ghost { background: transparent; color: var(--ink); }
+  .req { font-size: 13.5px; color: var(--ink-3); margin: 14px 0 0; }
+
+  section { padding: 56px 0; border-top: 1px solid var(--hair); }
+  h2 {
+    font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.6vw, 38px);
+    line-height: 1.15; margin: 0 0 8px; letter-spacing: -0.01em;
+  }
+  .sub { color: var(--ink-3); margin: 0 0 30px; max-width: 62ch; }
+  p { max-width: 68ch; }
+
+  figure { margin: 0; }
+  figure img { width: 100%; height: auto; display: block; border-radius: 10px; border: 1px solid var(--hair); }
+  figcaption { font-size: 13.5px; color: var(--ink-3); margin-top: 12px; }
+
+  .bets { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .bet { background: var(--card); border: 1px solid var(--hair); border-radius: 10px; padding: 20px 22px; }
+  .bet h3 { font-size: 15.5px; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .bet p { font-size: 14.5px; color: var(--ink-2); margin: 0; }
+
+  .proof {
+    background: var(--card); border: 1px solid var(--hair); border-radius: 10px;
+    padding: 20px 22px; overflow-x: auto;
+  }
+  .proof table { border-collapse: collapse; font-family: var(--mono); font-size: 13px; width: 100%; }
+  .proof td { padding: 4px 16px 4px 0; white-space: nowrap; vertical-align: top; }
+  .pass { color: var(--proof); font-weight: 500; }
+  .proof td:last-child { color: var(--ink-3); white-space: normal; }
+
+  .limits {
+    border-left: 3px solid var(--warn); padding: 4px 0 4px 18px; margin: 26px 0 0;
+  }
+  .limits h3 { font-size: 15.5px; margin: 0 0 8px; }
+  .limits p { font-size: 14.5px; color: var(--ink-2); margin: 0 0 10px; }
+
+  footer { padding: 48px 0 72px; border-top: 1px solid var(--hair); color: var(--ink-3); font-size: 13.5px; }
+  footer p { max-width: 68ch; }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <p class="mark">SC Prism · macOS · solo alpha</p>
+  <h1>Control over the AI you run. <em>Not a promise — a record.</em></h1>
+  <p class="lede">
+    Many agents, many models, one shared board — and a record of exactly what each
+    one did. Deterministic code chairs every run; a model never controls models.
+    Your own tests decide what counts as done, not the model that did the work.
+  </p>
+  <div class="cta">
+    <a class="btn" href="https://github.com/sandhusukhdeep2/sc-prism-releases/releases/latest">Download for macOS</a>
+    <a class="btn btn--ghost" href="https://github.com/sandhusukhdeep2/sc-prism-releases">Read the documentation</a>
+  </div>
+  <p class="req">
+    Free · notarised · macOS 14+ on Apple&nbsp;Silicon. Bring your own AI: a Claude or
+    ChatGPT subscription, API keys, or a local model server. Ships with no keys and
+    phones home to nobody.
+  </p>
+</header>
+
+<section class="wrap">
+  <h2>The problem it was built for</h2>
+  <p class="sub">Not "AI is unreliable" — something narrower and more annoying.</p>
+  <p>
+    Give an AI a real job and it works for a while, then tells you it's done.
+    Sometimes it is. Sometimes it wrote a file that doesn't compile, cited a page
+    it never opened, or quietly skipped the hard part. Telling the difference
+    means redoing the work yourself, which defeats the point.
+  </p>
+  <p>
+    SC Prism is built on the opposite arrangement: <strong>the model doesn't get
+    to decide when it's finished.</strong>
+  </p>
+</section>
+
+<section class="wrap">
+  <h2>How one run works</h2>
+  <p class="sub">Five stages, and a floor that is checked before any of them route.</p>
+  <figure>
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="assets/how-it-works-dark.svg">
+      <img src="assets/how-it-works-light.svg" alt="You ask; a deterministic orchestrator staffs a crew with each seat on its own AI; every tool call passes your grant, the agent's own definition and a destructive-command denylist; the work is verified by your own tests at zero tokens before any AI judge; the result is a verdict with replayable hash-chained evidence. A privacy floor evaluated before every routing decision pins credential-bearing text to the local model.">
+    </picture>
+  </figure>
+</section>
+
+<section class="wrap">
+  <h2>Four bets</h2>
+  <p class="sub">Each one is a constraint the code actually enforces.</p>
+  <div class="bets">
+    <div class="bet">
+      <h3>A model never orchestrates models</h3>
+      <p>Deterministic code chairs every multi-agent run. Agents contribute; the machinery decides whose turn it is.</p>
+    </div>
+    <div class="bet">
+      <h3>Done is proven where there's something to prove</h3>
+      <p>Your tests and build run first, at zero tokens. When there's nothing to compile it says <em>"skipped — nothing was checked"</em> rather than showing a tick it didn't earn.</p>
+    </div>
+    <div class="bet">
+      <h3>Privacy has a floor</h3>
+      <p>Text carrying a credential is pinned to your local model and cannot reach the cloud — even when you explicitly ask for cloud.</p>
+    </div>
+    <div class="bet">
+      <h3>Everything is a file you own</h3>
+      <p>Agents, skills, projects and verdicts are plain markdown in one folder. Readable in Obsidian, diffable in git, portable anywhere.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Proven, not claimed</h2>
+  <p class="sub">Every subsystem is probed against the shipped bundle before release — not mocked, not described. This is the most recent pass, against the build you can download.</p>
+  <div class="proof">
+    <table>
+      <tr><td class="pass">PASS</td><td>denylist refuses <code>rm -rf ~</code></td><td>blocked pre-exec</td></tr>
+      <tr><td class="pass">PASS</td><td>containment hides the API keys</td><td>unreadable</td></tr>
+      <tr><td class="pass">PASS</td><td>containment blocks self-approval</td><td>approvals intact</td></tr>
+      <tr><td class="pass">PASS</td><td>ordinary commands still run</td><td>real work unaffected</td></tr>
+      <tr><td class="pass">PASS</td><td>web search returns real results</td><td>8 results</td></tr>
+      <tr><td class="pass">PASS</td><td>vault tools work</td><td>vault readable</td></tr>
+      <tr><td class="pass">PASS</td><td>skills catalog loads</td><td>4 skills loaded</td></tr>
+      <tr><td class="pass">PASS</td><td>vault recall (full-text)</td><td>3 docs in 35 ms</td></tr>
+      <tr><td class="pass">PASS</td><td>skill allowed-tools narrows</td><td>source untouched</td></tr>
+    </table>
+  </div>
+  <p style="margin-top:26px">
+    These passes are the product of finding real failures, not of avoiding them.
+    A partial list of what this discipline caught: an agent whose definition asked
+    for the web was silently denied it; keyless web search returned nothing while
+    looking functional; two concurrent runs could fork the audit chain; a timeout
+    claimed to kill a command's children and didn't; and the evaluation gate
+    returned success whether or not it had blocked. Each is now covered by a test
+    that fails without the fix.
+  </p>
+</section>
+
+<section class="wrap">
+  <h2>Safety, described exactly</h2>
+  <p class="sub">Three layers stand between a model and your machine. Each is described as what it is, not as what would sound best.</p>
+  <p>
+    <strong>Grants.</strong> Computer and terminal access are off until you turn
+    them on, and an agent only holds a tool its own definition file declares.
+  </p>
+  <p>
+    <strong>A destructive-command denylist.</strong> Every shell command is scanned
+    before it executes. The list is deliberately narrow — <code>rm -f build/tmp.o</code>
+    and <code>git push --force-with-lease</code> run normally, because a guard that
+    blocks ordinary work teaches you to switch it off.
+  </p>
+  <p>
+    <strong>Containment.</strong> Commands run where your saved credentials are
+    unreadable and SC Prism's own approval file cannot be rewritten — so a command
+    can't approve itself for future tools.
+  </p>
+
+  <div class="limits">
+    <h3>What it does not do</h3>
+    <p>
+      The containment is a deny-list, not a sandbox. A command still runs as your
+      user: it can read and write your ordinary files, reach the network, and use
+      your installed tools. Verification commands you configure run outside it.
+    </p>
+    <p>
+      The privacy floor matches words, not meaning. It will not, on its own,
+      recognise an unlabelled API key, an account number or a home address. For
+      work that must never leave the machine, set the dependency dial to
+      <strong>Local first</strong>.
+    </p>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Where this came from</h2>
+  <p class="sub">The third form of an idea, and the dead end that shaped it.</p>
+  <p>
+    The first attempt put a primary AI in charge of the other AIs. It fails for a
+    reason worth naming: the thing you most need to trust — who decides what, in
+    what order, with what permission — ends up delegated to the least predictable
+    component in the system.
+  </p>
+  <p>
+    SC Prism inverts that. A deterministic orchestrator controls the models; a
+    model never controls models. Every other property here follows from that one
+    decision.
+  </p>
+</section>
+
+<section class="wrap">
+  <h2>Open standards, one per layer</h2>
+  <p class="sub">Vendor-neutral by construction — the direct answer to lock-in.</p>
+  <div class="bets">
+    <div class="bet"><h3>MCP</h3><p>Agents to external tools and services.</p></div>
+    <div class="bet"><h3>A2A</h3><p>Agents to each other.</p></div>
+    <div class="bet"><h3>OKF</h3><p>Your vault to any consumer.</p></div>
+    <div class="bet"><h3>Agent Skills</h3><p>Reusable procedures to any agent.</p></div>
+  </div>
+  <p style="margin-top:22px">
+    A skill written for another tool works here; one written here works elsewhere.
+    Your knowledge and capabilities are portable on day one, not after an export.
+  </p>
+</section>
+
+<section class="wrap">
+  <h2>Where this is going</h2>
+  <p class="sub">A direction, not a promise — and separated from what ships today.</p>
+  <p>
+    This release is the solo application: one person, one machine, a full crew, on
+    macOS. Designed for and <strong>not yet built</strong>: cross-platform desktop;
+    a team mode where colleagues run under your governance without ever holding
+    your keys; a governance console for spend, drift and audit; and a training loop
+    that improves local models from recorded verdicts, so capability rises while
+    cost falls.
+  </p>
+  <p>
+    The architecture already assumes all of it — the engine is Python, the router
+    is Go, the surface is web technology, and the vault is a portable open-format
+    bundle. None of it is load-bearing on macOS. What separates this from a
+    roadmap is the rule the product runs on: a thing is described as built only
+    when it can be demonstrated.
+  </p>
+</section>
+
+<section class="wrap">
+  <h2>Status</h2>
+  <p class="sub">One person, one Mac, full crew.</p>
+  <p>
+    This release is the solo product. Team mode is in development — the groundwork
+    ships in this build, and member joining arrives in a later release. It's built
+    by a solo founder, and it dogfoods itself: parts of SC Prism's own tooling were
+    built by SC Prism's crew, on the record.
+  </p>
+  <div class="cta" style="margin-top:26px">
+    <a class="btn" href="https://github.com/sandhusukhdeep2/sc-prism-releases/releases/latest">Download for macOS</a>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>
+    © 2026 Sukhdeep Singh Sandhu. SC Prism is independent software, not affiliated
+    with Anthropic, Google, OpenAI or the Obsidian project. It is not open source;
+    see the licence in the repository for terms and the warranty disclaimer.
+  </p>
+</footer>
+
+</body>
+</html>
