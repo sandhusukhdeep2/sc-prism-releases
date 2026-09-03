@@ -30,8 +30,8 @@ projects in them are invented — see [Look inside](#look-inside).</sup>
 Every serious tool now fans work out across agents, so "many agents" is
 commoditising fast. What is not commoditising is being able to prove what they
 did: a verifier that runs your own checks first, an audit trail you can replay,
-routing that keeps sensitive work on your machine, and models that get cheaper
-as they learn from verdicts rather than from vibes.
+routing that keeps sensitive work on your machine, and routing that gets
+cheaper as it learns from verdicts rather than from vibes.
 
 *Provably done, on-prem, at falling cost.*
 
@@ -336,12 +336,18 @@ should go. The artefact is small and readable — `training/models/v1/weights.js
 holds logits per kind (general, retrieval, reasoning, …) over the actions
 `local` and `cloud`. Nothing about it is a black box; you can open it.
 
-**A newly trained policy is never adopted on faith.** It has to beat the
-incumbent on your own golden tasks before it is allowed to replace it, and the
-promotion manifest records the evidence — the lift, the baseline and candidate
-means, and a per-golden delta with a `regressed` flag on each one. A candidate
-that wins on average but regresses a golden does not ship. Running the learning
-step is a dry-run preview; adopting the result is a separate, explicit action.
+**A newly trained policy is never adopted on faith — and it is worth being
+exact about what the gate does and does not check.** The candidate is scored
+against an *untrained* 50/50 prior, not against whichever policy is currently
+adopted, so the comparison answers "is this better than no opinion", not "is
+this better than what I have". The goldens are four fixtures shipped with the
+app, not tasks from your vault, and they are scored by a routing heuristic
+rather than replayed through the loop. What is strict is the regression veto:
+one golden going backwards discards the candidate outright, whatever the
+average says. The promotion manifest keeps the lift, the baseline and candidate
+means, and a per-golden delta with a `regressed` flag on each. Running the
+learning step is a dry-run preview; adopting the result is a separate, explicit
+action.
 
 **What is learned is which model should do which kind of work — never the
 models' weights.** The app says so on the page itself: *route policy · never the

@@ -224,10 +224,11 @@
   <p>
     Those records train a <strong>route policy</strong>: per task-kind weights over whether work
     goes to a local model or a cloud one. The artefact is a small readable file of logits, not a
-    black box. A newly trained policy is never adopted on faith — it has to beat the incumbent on
-    your own golden tasks, and the promotion record keeps the lift and a per-golden delta with a
-    regression flag on each one. A candidate that wins on average but regresses a golden does not
-    ship.
+    black box. A newly trained policy is never adopted on faith, though it is worth
+    knowing what the gate checks: the candidate is scored against an untrained 50/50 prior rather
+    than against the policy you currently have, on four golden fixtures shipped with the app, using
+    a routing heuristic rather than a replay. The strict part is the regression veto — one golden
+    going backwards discards the candidate outright, whatever the average says.
   </p>
   <p>
     What is learned is <strong>which model should do which kind of work — never the models'
