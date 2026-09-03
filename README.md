@@ -11,7 +11,7 @@ whether it counts as done.
 It ships today as a single macOS app for one person. That is the first step of
 a deliberate sequence, not the shape of the thing.
 
-![SC Prism — a project room with its staffed crew](assets/hero.png)
+![SC Prism at a glance: you describe one job; a deterministic orchestrator staffs a board with a seat on each AI you have; every call passes your grant, the agent's own definition, a destructive-command denylist and a privacy floor; your own tests decide the verdict and everything lands on a hash-chained record — shown with four screenshots of the running app](assets/hero.png)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/how-it-works-dark.svg">
@@ -131,6 +131,88 @@ and real:
 - **Governance is part of the story.** A blocked call shows ⛔ with the rule
   that blocked it. A sensitive result fetched from the web but withheld from
   the cloud shows 🔒. Held actions say they're waiting for your approval.
+
+## Look inside
+
+Real screenshots from a real install, taken against the shipping build. The
+company, the projects and the files in them are invented so that nothing
+personal appears, and the vault's own path is shown generically for the same
+reason. Nothing else is retouched: every number on these screens is whatever
+the app measured on the runs behind them.
+
+### One board, and a live account of who is on it
+
+You describe the job; the orchestrator staffs the board and holds the order.
+Every seat is named, with the model actually behind it and what it sent back —
+this run happened to be staffed entirely on the local model, and the badge says
+so: six vault notes read, none of it off the machine.
+
+![The work board: three named seats — lead, researcher, critic — each showing the model behind it and the tokens it returned, with a badge saying the vault reads stayed on this Mac](assets/shots/01-work.png)
+
+### Your crew, and which AI each one runs on
+
+Agents are markdown files in your vault, not rows in a database. Every seat
+carries its own charter, its own skills, and its own model — change one and
+the file changes with it.
+
+![The agents page: system crew and a project team, each card showing its model badge](assets/shots/02-agents.png)
+
+### Skills the crew can use — and tools it builds when none fit
+
+Skills are the open `SKILL.md` format, so one written for Claude Code, Codex,
+Cursor or Gemini CLI works here unchanged. When the crew hits a job no tool
+covers, it writes one — and that tool stays inert until it passes four gates.
+The two at the top show the system refusing itself: one is scope-approved but
+unproven, the other is quarantined for asking for access it never declared.
+
+![The skill library, with two crew-built tools held at the gates above it](assets/shots/03-skills.png)
+
+### Your AIs, on your terms
+
+Bring a subscription, an API key, a local server, or all three — each one
+switched on separately. Keys go to the gateway and are never rendered back into
+the interface, which is why the saved Gemini credential shows as saved and
+nothing else. Nothing is configured for you and nothing phones home.
+
+![The providers settings: a Claude subscription on a Pro/Max plan, OpenAI switched off, and Gemini connected by API key with the credential held by the gateway](assets/shots/04-ais.png)
+
+### Rules in your words, not a config file
+
+What the crew may never touch, what it must ask about first, which check has
+to pass before any work is trusted, and which AI is allowed to see what.
+
+![The rules review: never-touch paths, always-ask actions, the verify command, and the routing policy](assets/shots/05-rules.png)
+
+### Standing work, on a timer
+
+Jobs that repeat — a vault health sweep, a cost and drift review, a nightly
+build of a project — each with its own cadence and its own record.
+
+![The automations page: standing jobs with cadences and standing build loops](assets/shots/06-automations.png)
+
+### Where the money and the privacy actually went
+
+Not a promise about local-first — a measurement of it, taken from the runs you
+have already done. Here 78% of measured model-call tokens stayed on the machine.
+The Tier-1 panel is equally literal: on these runs no project was bound, so it
+reports that there was nothing to verify rather than a saving it did not make.
+
+![The memory and learning page: three memory tiers, the local versus cloud token share at 78% local, the Tier-1 panel reporting that nothing was verified, and the cost floor](assets/shots/07-cost.png)
+
+### The governance console
+
+Burn by provider, hook latency and fire-rate, drift across runs, and the eval
+scores behind the verdicts — with the whole hash-chained record exportable as a
+compliance report.
+
+![The governance console: token burn split between local and cloud with the share of runs that stayed on this Mac, hook latency and fire-rate, a drift monitor, and eval scores with a compliance export button](assets/shots/09-console.png)
+
+### One folder of markdown, and it is yours
+
+Agents, skills, projects, verdicts, the audit chain. Open it in Obsidian, diff
+it in git, carry it to another machine. Nothing is locked inside the app.
+
+![The vault browser: the agents folder open, an agent definition rendered, with backlinks](assets/shots/08-vault.png)
 
 ## The capability system — real power, three locks each
 

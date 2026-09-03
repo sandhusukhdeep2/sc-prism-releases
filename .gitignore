@@ -5,3 +5,9 @@
 LINKEDIN-POST.md
 RELEASE-CHECKLIST.md
 capability-probe.py
+
+# screenshot compositing sources (the published PNGs are what matter)
+assets/shots/*.html
+assets/shots/*.body.html
+assets/shots/build.py
+assets/shots/shell.css
