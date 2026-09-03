@@ -213,6 +213,32 @@
 </section>
 
 <section class="wrap">
+  <h2>What it learns from its own work</h2>
+  <p class="sub">The "falling cost" half of the thesis, and the part of it that already runs.</p>
+  <p>
+    Every run that passes emits one training record — the task, the trajectory, the tools used,
+    the verdict, and a reward computed from whether your own checks passed, how the trajectory
+    scored, and how much of the token envelope was left. A failing run emits nothing, so the
+    corpus is verified outcomes only.
+  </p>
+  <p>
+    Those records train a <strong>route policy</strong>: per task-kind weights over whether work
+    goes to a local model or a cloud one. The artefact is a small readable file of logits, not a
+    black box. A newly trained policy is never adopted on faith — it has to beat the incumbent on
+    your own golden tasks, and the promotion record keeps the lift and a per-golden delta with a
+    regression flag on each one. A candidate that wins on average but regresses a golden does not
+    ship.
+  </p>
+  <p>
+    What is learned is <strong>which model should do which kind of work — never the models'
+    weights.</strong> An adopted policy applies in Auto-route mode; with a provider pinned, the
+    interface says the policy is not being consulted rather than implying it is live. The reward
+    in each record is computed, not applied: it is the objective a future fine-tuning pass would
+    optimise, and that pass is not built.
+  </p>
+</section>
+
+<section class="wrap">
   <h2>Four bets</h2>
 
   <p class="sub">Each one is a constraint the code actually enforces.</p>
@@ -341,7 +367,7 @@
     This release is the solo application: one person, one machine, a full crew, on
     macOS. Designed for and <strong>not yet built</strong>: cross-platform desktop;
     a team mode where colleagues run under your governance without ever holding
-    your keys; the same governance console widened across a team; and a training loop
+    your keys; the same governance console widened across a team; and weight-level training
     that improves local models from recorded verdicts, so capability rises while
     cost falls.
   </p>

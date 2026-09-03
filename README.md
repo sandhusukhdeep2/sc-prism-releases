@@ -320,6 +320,40 @@ returned success whether or not it had blocked.
 
 Each one is now covered by a test that fails without the fix.
 
+## What it learns from its own work
+
+This is the part of "at falling cost" that already runs, and it is worth being
+exact about what is and is not learned.
+
+Every run that passes emits one training record to `<vault>/training/records.jsonl`
+— the task, the trajectory, the tools used, the verdict, and a reward computed
+from three measured things: whether your own Tier-1 checks passed, how the
+trajectory scored, and how much of the token envelope was left. A run that fails
+emits nothing, so the corpus is verified outcomes only.
+
+Those records train a **route policy**: per task-kind weights over where work
+should go. The artefact is small and readable — `training/models/v1/weights.json`
+holds logits per kind (general, retrieval, reasoning, …) over the actions
+`local` and `cloud`. Nothing about it is a black box; you can open it.
+
+**A newly trained policy is never adopted on faith.** It has to beat the
+incumbent on your own golden tasks before it is allowed to replace it, and the
+promotion manifest records the evidence — the lift, the baseline and candidate
+means, and a per-golden delta with a `regressed` flag on each one. A candidate
+that wins on average but regresses a golden does not ship. Running the learning
+step is a dry-run preview; adopting the result is a separate, explicit action.
+
+**What is learned is which model should do which kind of work — never the
+models' weights.** The app says so on the page itself: *route policy · never the
+models' weights.*
+
+**Its limits, stated plainly.** An adopted policy applies in Auto-route mode. If
+you have pinned a provider, or the Go router is doing the routing, it is not
+consulted, and the interface says which of those is true rather than implying
+the policy is live. The reward in every training record is *computed, not
+applied*: it is the objective a future fine-tuning pass would optimise, and that
+pass is not built. Records accumulate against the day it is.
+
 ## Agent Skills — the open standard
 
 A skill is a folder with a `SKILL.md` describing a procedure, and SC Prism
@@ -354,8 +388,10 @@ on macOS.
 colleagues connect to a gateway you host and run under your governance without
 ever holding your keys; an editor surface with routing and the vault built in
 rather than bolted on; the same governance console widened across a team,
-rather than the single-machine one that ships today; and a training loop that improves local models from recorded verdicts, so
-capability rises while cost falls.
+rather than the single-machine one that ships today; and weight-level training
+of a local model from recorded verdicts. Route-policy learning from those
+verdicts already ships and is described above; what is deferred is the
+fine-tuning pass that would change a model rather than the routing.
 
 The architecture already assumes all of it. The engine is Python, the router is
 Go, the surface is web technology, agent-to-agent seams are in place, and the
