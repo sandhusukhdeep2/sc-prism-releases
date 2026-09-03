@@ -168,9 +168,9 @@
 
 <section class="wrap">
   <h2>Look inside</h2>
-  <p class="sub">Real captures of the shipping build. The company, the projects and the files in
-    them are invented so no personal data appears, and the vault path is shown generically for the
-    same reason — nothing else is retouched.</p>
+  <p class="sub">Captures of the shipping build, not mockups. The company, the projects and the
+    files in them are invented so that no personal data appears. Nothing on these six was retouched,
+    and no figure was altered — every number is what the app measured on the runs behind it.</p>
   <div class="shots">
     <figure>
       <img src="assets/shots/01-work.png" alt="The work board mid-run: three named seats — lead, researcher and critic — each showing the model behind it and the tokens it returned, and a badge reading that six vault notes were read and stayed on this Mac.">
@@ -240,15 +240,20 @@
   <p class="sub">Every subsystem is probed against the shipped bundle before release — not mocked, not described. This is the most recent pass, against the build you can download.</p>
   <div class="proof">
     <table>
-      <tr><td class="pass">PASS</td><td>denylist refuses <code>rm -rf ~</code></td><td>blocked pre-exec</td></tr>
-      <tr><td class="pass">PASS</td><td>containment hides the API keys</td><td>unreadable</td></tr>
+      <tr><td class="pass">PASS</td><td>denylist refuses <code>rm -rf ~</code></td><td>destructive command blocked pre-exec</td></tr>
+      <tr><td class="pass">PASS</td><td>containment hides API keys</td><td>unreadable</td></tr>
       <tr><td class="pass">PASS</td><td>containment blocks self-approval</td><td>approvals intact</td></tr>
-      <tr><td class="pass">PASS</td><td>ordinary commands still run</td><td>real work unaffected</td></tr>
-      <tr><td class="pass">PASS</td><td>web search returns real results</td><td>8 results</td></tr>
-      <tr><td class="pass">PASS</td><td>vault tools work</td><td>vault readable</td></tr>
-      <tr><td class="pass">PASS</td><td>skills catalog loads</td><td>4 skills loaded</td></tr>
-      <tr><td class="pass">PASS</td><td>vault recall (full-text)</td><td>3 docs in 35 ms</td></tr>
-      <tr><td class="pass">PASS</td><td>skill allowed-tools narrows</td><td>source untouched</td></tr>
+      <tr><td class="pass">PASS</td><td>ordinary commands run</td><td>unaffected</td></tr>
+      <tr><td class="pass">PASS</td><td>web search returns results</td><td>real results</td></tr>
+      <tr><td class="pass">PASS</td><td>vault tools work</td><td>readable</td></tr>
+      <tr><td class="pass">PASS</td><td>skills catalog loads</td><td>4 skills</td></tr>
+      <tr><td class="pass">PASS</td><td>vault recall (BM25)</td><td>3 docs in 44 ms</td></tr>
+      <tr><td class="pass">PASS</td><td>skill allowed-tools narrows</td><td>narrowed, source untouched</td></tr>
+      <tr><td class="pass">PASS</td><td>manifest refuses wildcards</td><td>refused</td></tr>
+      <tr><td class="pass">PASS</td><td>confidential forces local</td><td>pinned to this machine</td></tr>
+      <tr><td class="pass">PASS</td><td>scope approval is inert</td><td>approving scope grants nothing</td></tr>
+      <tr><td class="pass">PASS</td><td>audit catches aliased eval</td><td>AST, not regex</td></tr>
+      <tr><td class="pass">PASS</td><td><code>sandbox-exec</code> available</td><td>Gate 2 enforceable</td></tr>
     </table>
   </div>
   <p style="margin-top:26px">
@@ -335,7 +340,7 @@
     This release is the solo application: one person, one machine, a full crew, on
     macOS. Designed for and <strong>not yet built</strong>: cross-platform desktop;
     a team mode where colleagues run under your governance without ever holding
-    your keys; a governance console for spend, drift and audit; and a training loop
+    your keys; the same governance console widened across a team; and a training loop
     that improves local models from recorded verdicts, so capability rises while
     cost falls.
   </p>

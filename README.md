@@ -13,6 +13,9 @@ a deliberate sequence, not the shape of the thing.
 
 ![SC Prism at a glance: you describe one job; a deterministic orchestrator staffs a board with a seat on each AI you have; every call passes your grant, the agent's own definition, a destructive-command denylist and a privacy floor; your own tests decide the verdict and everything lands on a hash-chained record — shown with four screenshots of the running app](assets/hero.png)
 
+<sup>The four panels above are real captures of this build. The company and the
+projects in them are invented — see [Look inside](#look-inside).</sup>
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/how-it-works-dark.svg">
   <img alt="How one run works: you ask; a deterministic orchestrator staffs a crew with each seat on its own AI; every tool call passes your grant, the agent's own definition and a destructive-command denylist; the work is verified by your own tests at zero tokens before any AI judge; the result is a verdict with replayable hash-chained evidence. A privacy floor evaluated before every routing decision pins credential-bearing text to the local model." src="assets/how-it-works-light.svg">
@@ -124,21 +127,26 @@ and real:
 - **Every seat speaks for itself.** Each agent's contribution appears as its
   own bubble — agent name · AI brand · board turn — with the manager's
   synthesis labeled as exactly that.
-- **Every action is on the record.** The live stream shows each file added or
-  updated by name, each terminal command with its exit code, each web search
-  with its query, each vault file read — every row expandable into honest
-  IN/OUT detail. Nothing summarized away, nothing invented.
+- **The stream is the evidence, not a summary of it.** Each file added or
+  updated appears by name, each terminal command with its exit code, each web
+  search with its query, each vault file read — every row expandable into
+  honest IN/OUT detail. Nothing summarized away, nothing invented.
 - **Governance is part of the story.** A blocked call shows ⛔ with the rule
   that blocked it. A sensitive result fetched from the web but withheld from
   the cloud shows 🔒. Held actions say they're waiting for your approval.
 
 ## Look inside
 
-Real screenshots from a real install, taken against the shipping build. The
-company, the projects and the files in them are invented so that nothing
-personal appears, and the vault's own path is shown generically for the same
-reason. Nothing else is retouched: every number on these screens is whatever
-the app measured on the runs behind them.
+Captures of the shipping build, not mockups. The company, the projects and the
+files in them are invented so that nothing personal appears.
+
+Two of them were altered afterwards, and it would be dishonest to imply
+otherwise. In the vault browser the home-folder path is painted over with a
+generic one — the app renders the real path and there is no setting that hides
+it. In the cost view a strip reporting this machine's search-index state was cut
+out and the panels below it slid up. Nothing else was changed, and no figure was
+touched: every number on these screens is what the app measured on the runs
+behind them, including the panels that report having measured nothing.
 
 ### One board, and a live account of who is on it
 
@@ -178,15 +186,18 @@ nothing else. Nothing is configured for you and nothing phones home.
 
 ### Rules in your words, not a config file
 
-What the crew may never touch, what it must ask about first, which check has
-to pass before any work is trusted, and which AI is allowed to see what.
+What the crew may never touch — a production database, a secrets directory,
+client repositories — what it must stop and ask about first, which check has to
+pass before any work is trusted, and which AI is allowed to see what.
 
-![The rules review: never-touch paths, always-ask actions, the verify command, and the routing policy](assets/shots/05-rules.png)
+![The rules review: six confirmed rule cards — the companion and the model behind it, the roles you hold, the actions that always ask first, the resources no agent may touch, the command that must pass before work is trusted, the compliance regime folded into every report, and the policy for which AI handles what](assets/shots/05-rules.png)
 
 ### Standing work, on a timer
 
-Jobs that repeat — a vault health sweep, a cost and drift review, a nightly
-build of a project — each with its own cadence and its own record.
+Jobs that repeat — summarising new notes every twelve hours, a daily vault
+health sweep, a weekly cost and drift review — each with its own cadence and
+its own record. Below them, saved tasks you can re-run on a timer; these are
+switched off, and the page says so rather than implying they are live.
 
 ![The automations page: standing jobs with cadences and standing build loops](assets/shots/06-automations.png)
 
@@ -199,7 +210,7 @@ reports that there was nothing to verify rather than a saving it did not make.
 
 ![The memory and learning page: three memory tiers, the local versus cloud token share at 78% local, the Tier-1 panel reporting that nothing was verified, and the cost floor](assets/shots/07-cost.png)
 
-### The governance console
+### The governance console — yours, single-machine
 
 Burn by provider, hook latency and fire-rate, drift across runs, and the eval
 scores behind the verdicts — with the whole hash-chained record exportable as a
@@ -212,7 +223,7 @@ compliance report.
 Agents, skills, projects, verdicts, the audit chain. Open it in Obsidian, diff
 it in git, carry it to another machine. Nothing is locked inside the app.
 
-![The vault browser: the agents folder open, an agent definition rendered, with backlinks](assets/shots/08-vault.png)
+![The vault browser: the agents folder open with every agent as its own markdown file, one agent definition rendered, and a link rail scanned live from the vault — showing zero in and zero out for this particular note](assets/shots/08-vault.png)
 
 ## The capability system — real power, three locks each
 
@@ -328,8 +339,8 @@ never grant a capability you did not.
 
 Recall ranks your vault with Okapi BM25 over the full text of every note, then
 reranks the shortlist. A decision recorded in a note's third paragraph is
-findable; it does not have to be in the title. On a 70-file vault a query
-returns in about 20 milliseconds, entirely on your machine, with no embedding
+findable; it does not have to be in the title. The probe below is the only figure published for
+it: three documents back in 44 ms, entirely on your machine, with no embedding
 service and no vector database.
 
 ## Where this is going
@@ -342,8 +353,8 @@ on macOS.
 **Designed for and not yet built:** cross-platform desktop; a team mode where
 colleagues connect to a gateway you host and run under your governance without
 ever holding your keys; an editor surface with routing and the vault built in
-rather than bolted on; a governance console for spend, drift and audit across a
-team; and a training loop that improves local models from recorded verdicts, so
+rather than bolted on; the same governance console widened across a team,
+rather than the single-machine one that ships today; and a training loop that improves local models from recorded verdicts, so
 capability rises while cost falls.
 
 The architecture already assumes all of it. The engine is Python, the router is
